@@ -4,7 +4,7 @@
  * Tree.ts
  */
 
-import type { TreeData, NodeOriginalType } from './type';
+import type { TreeData } from './type';
 
 type TreeNodeInstance = InstanceType<typeof TreeNode>;
 
@@ -74,14 +74,9 @@ class Tree {
         depth = 0,
     ) {
         if (treeData) {
-            // 1. 初始化对应深度的记录
-            const level = depth + 1;
-            const levelMap = this.treeNodeLevelMap;
-            const depthElements = levelMap.get(level);
-            !depthElements && levelMap.set(level, []);
-            // 2. 更新parent为上一次创建的实例
+            // 1. 更新parent为上一次创建的实例
             parent = callback(treeData, parent, depth);
-            // 3. 递归处理子节点
+            // 2. 递归处理子节点
             if (treeData.children && treeData.children.length) {
                 treeData.children.forEach(data => {
                     this._depthFirstSearch(data, callback, parent, depth + 1);
@@ -110,11 +105,15 @@ class Tree {
         // 4. 更新树的高度
         this.height = Math.max(this.height, depth + 1);
         // 5. 更新树的宽度
+        const level = depth + 1;
         const levelMap = this.treeNodeLevelMap;
-        const depthElements = levelMap.get(depth + 1);
+        const depthElements = levelMap.get(level);
         if (Array.isArray(depthElements)) {
             depthElements.push(treeNode);
             this.width = Math.max(this.width, depthElements.length);
+        } else {
+            levelMap.set(level, [treeNode]);
+            this.width = Math.max(this.width, 1);
         }
         // 6. 父节点存在时需要更新的关系
         if (parent) {
@@ -180,12 +179,4 @@ class Tree {
     }
 }
 
-class TreeGraph {
-    public tree: InstanceType<typeof Tree> | null = null;
-
-    constructor(treeData: TreeData) {
-        this.tree = new Tree(treeData);
-    }
-}
-
-export default TreeGraph;
+export default Tree;
