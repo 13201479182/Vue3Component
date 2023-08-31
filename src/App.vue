@@ -12,8 +12,6 @@ import TreeGraph from '../util/TreeGraph';
 import { treeData } from '../mocks/treeData';
 
 const treeGraph = new TreeGraph(treeData);
-console.log('treeGraph:', treeGraph);
 </script>
 
 <style scoped></style>
-../util/TreeGraph
