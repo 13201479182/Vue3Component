@@ -36,32 +36,29 @@ class Tree {
     public height = 0;
     // 树的宽度
     public width = 0;
-    // 树的数据
-    public treeData: TreeData | null = null;
     // 树的根节点
     public treeNode: InstanceType<typeof TreeNode> | null = null;
     // 基于uniqueUuid的map节点存储
-    public treeNodeMap = new Map();
+    public treeNodeMap = new Map<string, TreeNode>();
+    // 基于树层级存储树的节点
+    public treeNodeLevelMap = new Map<number, TreeNode[]>();
 
     constructor(treeData: TreeData) {
-        this.treeData = treeData;
-        this.createTree(treeData);
+        this._createTree(treeData);
     }
 
     // 生成树
-    createTree(treeData: TreeData) {
-        if (!treeData) return;
-        // 生成树实例
-        const treeNode = this._depthFirstSearch(
-            treeData,
-            this._createTreeNode.bind(this),
-        );
-        // 挂载树实例至当前实例上
-        if (!this.treeNode) {
-            // 直接挂载
-            this.treeNode = treeNode;
+    _createTree(treeData: TreeData) {
+        if (treeData) {
+            // 生成树实例且挂载至当前实例上
+            this.treeNode = this._depthFirstSearch(
+                treeData,
+                this._createTreeNode.bind(this),
+            );
         } else {
-            // 寻找并更新对应节点的子节点
+            console.error(
+                `argument err: _createTree must have a tree data as its argument!`,
+            );
         }
     }
 
@@ -72,28 +69,22 @@ class Tree {
             treeData: TreeData,
             parent: TreeNodeInstance | null,
             depth: number,
-            depthMap: Map<number, TreeNode[]>,
         ) => TreeNodeInstance,
         parent: TreeNodeInstance | null = null,
         depth = 0,
-        depthMap = new Map<number, TreeNode[]>(),
     ) {
         if (treeData) {
-            // 初始化对应深度的记录
-            const depthElements = depthMap.get(depth);
-            !depthElements && depthMap.set(depth, []);
-            // 更新parent为上一次创建的实例
-            parent = callback(treeData, parent, depth, depthMap);
-            // 递归处理子节点
+            // 1. 初始化对应深度的记录
+            const level = depth + 1;
+            const levelMap = this.treeNodeLevelMap;
+            const depthElements = levelMap.get(level);
+            !depthElements && levelMap.set(level, []);
+            // 2. 更新parent为上一次创建的实例
+            parent = callback(treeData, parent, depth);
+            // 3. 递归处理子节点
             if (treeData.children && treeData.children.length) {
                 treeData.children.forEach(data => {
-                    this._depthFirstSearch(
-                        data,
-                        callback,
-                        parent,
-                        depth + 1,
-                        depthMap,
-                    );
+                    this._depthFirstSearch(data, callback, parent, depth + 1);
                 });
             }
         }
@@ -106,7 +97,6 @@ class Tree {
         treeData: TreeData,
         parent: TreeNodeInstance | null,
         depth: number,
-        depthMap: Map<number, TreeNode[]>,
     ) {
         const treeNode = new TreeNode(treeData);
         // 1. 更新节点的深度
@@ -120,7 +110,8 @@ class Tree {
         // 4. 更新树的高度
         this.height = Math.max(this.height, depth + 1);
         // 5. 更新树的宽度
-        const depthElements = depthMap.get(depth);
+        const levelMap = this.treeNodeLevelMap;
+        const depthElements = levelMap.get(depth + 1);
         if (Array.isArray(depthElements)) {
             depthElements.push(treeNode);
             this.width = Math.max(this.width, depthElements.length);
@@ -147,9 +138,12 @@ class Tree {
     }
 
     // 广度遍历
-    breadthFirstSearch(callback: (item: TreeData) => TreeNodeInstance) {
+    breadthFirstSearch(
+        treeData: TreeData | TreeNodeInstance,
+        callback: (item: TreeData) => TreeNodeInstance,
+    ) {
         // 获取树的根节点
-        const queue = [this.treeData];
+        const queue = [treeData];
         while (queue.length > 0) {
             const node = queue.shift() as TreeData;
             callback(node);
@@ -160,14 +154,37 @@ class Tree {
             }
         }
     }
+
+    // 向树追加子树
+    appendSubTree(treeData: TreeData) {
+        if (!treeData)
+            return console.error(
+                `argument err: appendSubTree must have a tree data as its argument!`,
+            );
+        // 生成树实例且挂载至当前实例上
+        const treeNode = this.treeNodeMap.get(treeData.uniqueUuid);
+        if (treeNode && Array.isArray(treeData.children)) {
+            treeData.children.forEach(data => {
+                this._depthFirstSearch(
+                    data,
+                    this._createTreeNode.bind(this),
+                    treeNode,
+                    treeNode.depth + 1,
+                );
+            });
+        } else {
+            return console.error(
+                `argument err: current node can not exsit in tree!`,
+            );
+        }
+    }
 }
 
 class TreeGraph {
+    public tree: InstanceType<typeof Tree> | null = null;
+
     constructor(treeData: TreeData) {
-        console.time('构建树时间:');
-        const tree = new Tree(treeData);
-        console.timeEnd('构建树时间:');
-        console.log('tree:', tree);
+        this.tree = new Tree(treeData);
     }
 }
 
