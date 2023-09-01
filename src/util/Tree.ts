@@ -42,7 +42,7 @@ class TreeNode {
     }
 
     // 获取节点的右轮廓
-    get rightOutline(): TreeNode | null {
+    get right(): TreeNode | null {
         return (
             this.thread ||
             (this.children.length > 0
@@ -52,7 +52,7 @@ class TreeNode {
     }
 
     // 获取节点的左轮廓
-    get leftOutline(): TreeNode | null {
+    get left(): TreeNode | null {
         return (
             this.thread || (this.children.length > 0 ? this.children[0] : null)
         );
@@ -208,7 +208,7 @@ class Tree {
             }
             // 6-5 更新当前节点对应父级的最左侧节点
             if (index > 0) {
-                treeNode.leftMostSibling = parent.children[0];
+                treeNode.leftMostBrother = parent.children[0];
             }
         }
         // 7. 生成节点的map结构,便于查找
@@ -236,52 +236,31 @@ class Tree {
     _apportion(treeNode: TreeNode, distance: number) {
         const leftBrother = treeNode.leftBrother;
         if (leftBrother) {
-            /**
-             * 四个节点指针,用于计算轮廓差值
-             *
-             * leftSubtreeLeft:     左子树左轮廓
-             * leftSubtreeRight:    左子树右轮廓
-             * rightSubtreeLeft:    右子树左轮廓
-             * rightSubtreeRight:   右子树右轮廓
-             */
-            let leftSubtreeLeft: null | TreeNode = leftBrother;
-            let leftSubtreeRight: null | TreeNode = leftBrother;
-            let rightSubtreeLeft: null | TreeNode = treeNode;
-            let rightSubtreeRight: null | TreeNode = treeNode;
+            // 四个节点指针,用于计算轮廓差值
+            let leftTreeInner: null | TreeNode = leftBrother;
+            let leftTreeOuter: null | TreeNode = leftBrother;
+            let rightTreeInner: null | TreeNode = treeNode;
+            let rightTreeOuter: null | TreeNode = treeNode;
 
-            /**
-             * 四个mod指针,用于记录四个轮廓的差值
-             *
-             * leftSubtreeLeftMod:      左子树左轮廓的差值
-             * leftSubtreeRightMod:     左子树右轮廓的差值
-             * rightSubtreeLeftMod:     右子树左轮廓的差值
-             * rightSubtreeRightMod:    右子树右轮廓的差值
-             */
-            let leftSubtreeLeftMod = leftSubtreeLeft.mod;
-            let leftSubtreeRightMod = leftSubtreeRight.mod;
-            let rightSubtreeLeftMod = rightSubtreeLeft.mod;
-            let rightSubtreeRightMod = rightSubtreeRight.mod;
+            // 四个mod指针,用于记录四个轮廓的差值
+            let leftInnerMod = leftTreeInner.mod;
+            let leftOuterMod = leftTreeOuter.mod;
+            let rightInnerMod = rightTreeInner.mod;
+            let rightOuterMod = rightTreeOuter.mod;
 
-            while (
-                leftSubtreeRight.rightOutline &&
-                rightSubtreeLeft.leftOutline
-            ) {
-                leftSubtreeRight = leftSubtreeRight.rightOutline;
-                rightSubtreeLeft = rightSubtreeLeft.leftOutline;
-                leftSubtreeLeft = leftSubtreeLeft?.leftOutline
-                    ? leftSubtreeLeft.leftOutline
-                    : null;
-                rightSubtreeRight = rightSubtreeRight?.rightOutline
-                    ? rightSubtreeRight.rightOutline
-                    : null;
+            while (leftTreeInner.right && rightTreeInner.left) {
+                leftTreeInner = leftTreeInner.right;
+                rightTreeInner = rightTreeInner.left;
+                leftTreeOuter = leftTreeOuter?.left || null;
+                rightTreeOuter = rightTreeOuter?.right || null;
             }
 
             // 设置下一级节点的线程
-            if (rightSubtreeRight?.isLeaf && leftSubtreeRight?.rightOutline) {
-                rightSubtreeRight.thread = leftSubtreeRight.rightOutline;
+            if (rightTreeOuter?.isLeaf && leftTreeInner.right) {
+                rightTreeOuter.thread = leftTreeInner.right;
             }
-            if (leftSubtreeRight?.isLeaf && rightSubtreeRight?.leftOutline) {
-                leftSubtreeRight.thread = rightSubtreeRight.leftOutline;
+            if (leftTreeOuter?.isLeaf && rightTreeInner.left) {
+                leftTreeOuter.thread = rightTreeInner.left;
             }
         }
     }
