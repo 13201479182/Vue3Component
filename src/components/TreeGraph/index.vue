@@ -4,20 +4,30 @@
  * index.vue
 -->
 <template>
-    <div class="contanier">TreeGraph</div>
+    <div class="contanier">
+        <TreeGraphComponent :data="treeData"></TreeGraphComponent>
+    </div>
 </template>
 
 <script setup lang="ts">
-import { treeData, treeTestData } from '@/mocks/treeData';
-import TreeGraph from './index';
+import { ref } from 'vue';
 
-console.time('构建树时间:');
-const treeGraph = new TreeGraph(treeData);
-// 异步向树追加节点
-treeGraph.tree?.appendSubTree(treeTestData);
-console.timeEnd('构建树时间:');
+import { treeExample1 } from '@/mocks/treeData';
+import TreeGraph from './TreeGraph';
 
-console.log('treeGraph:', treeGraph);
+import TreeGraphComponent from './TreeGraphComponent.vue';
+
+const treeGraph = new TreeGraph(treeExample1);
+const treeData = ref(treeGraph.tree?.treeNode);
+
+console.log('TreeGraph:', treeGraph);
 </script>
 
-<style scoped></style>
+<style scoped>
+.contanier {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+</style>
+./treeGraph ./TreeGraph

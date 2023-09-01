@@ -1,1 +1,3 @@
-export { default as TreeGraph } from './TreeGraph/index.vue'
+import TreeGraph from './TreeGraph/index.vue';
+
+export { TreeGraph };

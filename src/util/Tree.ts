@@ -23,6 +23,14 @@ class TreeNode {
     public rightBrother: TreeNodeInstance | null = null;
     // 节点的原始数据
     public data: TreeData | null = null;
+    // 节点对应父级的最左侧节点
+    public leftMostBrother: TreeNode | null = null;
+    // 节点的x坐标
+    public x: number = 0;
+    // 节点对应的线程节点
+    public thread: null | TreeNode = null;
+    // 节点的差值 左兄弟定位与子节点中间定位
+    public mod: number = 0;
 
     constructor(treeData: TreeData) {
         this.data = treeData;
@@ -30,11 +38,24 @@ class TreeNode {
 
     // 是否为叶子节点
     get isLeaf() {
-        if (this.children.length) {
-            return false;
-        } else {
-            return true;
-        }
+        return this.children.length ? false : true;
+    }
+
+    // 获取节点的右轮廓
+    get rightOutline(): TreeNode | null {
+        return (
+            this.thread ||
+            (this.children.length > 0
+                ? this.children[this.children.length - 1]
+                : null)
+        );
+    }
+
+    // 获取节点的左轮廓
+    get leftOutline(): TreeNode | null {
+        return (
+            this.thread || (this.children.length > 0 ? this.children[0] : null)
+        );
     }
 
     // 获取节点的层级结构
@@ -59,9 +80,7 @@ class TreeNode {
         depth = this.depth,
     ) {
         if (treeNode) {
-            // 1. 更新parent为上一次创建的实例
             callback(treeNode, depth);
-            // 2. 递归处理子节点
             if (treeNode.children && treeNode.children.length) {
                 treeNode.children.forEach(data => {
                     this._depthFirstSearch(data, callback, depth + 1);
@@ -84,7 +103,10 @@ class Tree {
     public treeNodeMap = new Map<string, TreeNode>();
 
     constructor(treeData: TreeData) {
+        // 生成树
         this._createTree(treeData);
+        // 生成坐标
+        this._generateTreeNodeCoordinate();
     }
 
     // 生成树
@@ -184,10 +206,92 @@ class Tree {
                 // 6-4 更新前一个节点的右兄弟
                 preChild.rightBrother = treeNode;
             }
+            // 6-5 更新当前节点对应父级的最左侧节点
+            if (index > 0) {
+                treeNode.leftMostSibling = parent.children[0];
+            }
         }
         // 7. 生成节点的map结构,便于查找
         this.treeNodeMap.set(treeData.uniqueUuid, treeNode);
         return treeNode;
+    }
+
+    _firstwalk(treeNode: TreeNode, distance = 200) {
+        if (treeNode.isLeaf) {
+            // 叶子节点
+            if (treeNode.leftBrother) {
+                treeNode.x = treeNode.leftBrother.x + distance;
+            } else {
+                treeNode.x = 0;
+            }
+        } else {
+            treeNode.children.forEach(node => {
+                this._firstwalk(node, distance);
+                // 修正子孙节点位置
+                this._apportion(node, distance);
+            });
+        }
+    }
+
+    _apportion(treeNode: TreeNode, distance: number) {
+        const leftBrother = treeNode.leftBrother;
+        if (leftBrother) {
+            /**
+             * 四个节点指针,用于计算轮廓差值
+             *
+             * leftSubtreeLeft:     左子树左轮廓
+             * leftSubtreeRight:    左子树右轮廓
+             * rightSubtreeLeft:    右子树左轮廓
+             * rightSubtreeRight:   右子树右轮廓
+             */
+            let leftSubtreeLeft: null | TreeNode = leftBrother;
+            let leftSubtreeRight: null | TreeNode = leftBrother;
+            let rightSubtreeLeft: null | TreeNode = treeNode;
+            let rightSubtreeRight: null | TreeNode = treeNode;
+
+            /**
+             * 四个mod指针,用于记录四个轮廓的差值
+             *
+             * leftSubtreeLeftMod:      左子树左轮廓的差值
+             * leftSubtreeRightMod:     左子树右轮廓的差值
+             * rightSubtreeLeftMod:     右子树左轮廓的差值
+             * rightSubtreeRightMod:    右子树右轮廓的差值
+             */
+            let leftSubtreeLeftMod = leftSubtreeLeft.mod;
+            let leftSubtreeRightMod = leftSubtreeRight.mod;
+            let rightSubtreeLeftMod = rightSubtreeLeft.mod;
+            let rightSubtreeRightMod = rightSubtreeRight.mod;
+
+            while (
+                leftSubtreeRight.rightOutline &&
+                rightSubtreeLeft.leftOutline
+            ) {
+                leftSubtreeRight = leftSubtreeRight.rightOutline;
+                rightSubtreeLeft = rightSubtreeLeft.leftOutline;
+                leftSubtreeLeft = leftSubtreeLeft?.leftOutline
+                    ? leftSubtreeLeft.leftOutline
+                    : null;
+                rightSubtreeRight = rightSubtreeRight?.rightOutline
+                    ? rightSubtreeRight.rightOutline
+                    : null;
+            }
+
+            // 设置下一级节点的线程
+            if (rightSubtreeRight?.isLeaf && leftSubtreeRight?.rightOutline) {
+                rightSubtreeRight.thread = leftSubtreeRight.rightOutline;
+            }
+            if (leftSubtreeRight?.isLeaf && rightSubtreeRight?.leftOutline) {
+                leftSubtreeRight.thread = rightSubtreeRight.leftOutline;
+            }
+        }
+    }
+
+    // 生成树节点的坐标xy
+    _generateTreeNodeCoordinate() {
+        const treeNode = this.treeNode;
+        if (treeNode) {
+            this._firstwalk(treeNode);
+        }
     }
 
     // 广度遍历

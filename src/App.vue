@@ -4,14 +4,16 @@
  * App.vue
 -->
 <template>
-    <div class="contanier">
-        <TreeGraph></TreeGraph>
-    </div>
+    <TreeGraph></TreeGraph>
 </template>
 
 <script setup lang="ts">
-import TreeGraph from './components/TreeGraph/index.vue';
+import { TreeGraph } from '@/components/index';
 </script>
 
-<style scoped></style>
-../util/Tree ./components/TreeGraph
+<style>
+body {
+    padding: 0;
+    margin: 0;
+}
+</style>

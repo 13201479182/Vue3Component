@@ -349,3 +349,95 @@ export const treeTestData: TreeData = {
         },
     ],
 };
+
+export const treeExample1: TreeData = {
+    uniqueUuid: '1',
+    originalType: 1,
+    children: [
+        {
+            uniqueUuid: '1-1',
+            originalType: 1,
+            children: [
+                {
+                    uniqueUuid: '1-1-1',
+                    originalType: 1,
+                    children: [],
+                },
+                {
+                    uniqueUuid: '1-1-2',
+                    originalType: 1,
+                    children: [],
+                },
+                {
+                    uniqueUuid: '1-1-3',
+                    originalType: 1,
+                    children: [],
+                },
+            ],
+        },
+        {
+            uniqueUuid: '1-2',
+            originalType: 1,
+            children: [
+                {
+                    uniqueUuid: '1-2-1',
+                    originalType: 1,
+                    children: [
+                        {
+                            uniqueUuid: '1-2-1-1',
+                            originalType: 1,
+                            children: [],
+                        },
+                        {
+                            uniqueUuid: '1-2-1-2',
+                            originalType: 1,
+                            children: [],
+                        },
+                    ],
+                },
+                {
+                    uniqueUuid: '1-2-2',
+                    originalType: 1,
+                    children: [],
+                },
+                {
+                    uniqueUuid: '1-2-3',
+                    originalType: 1,
+                    children: [
+                        {
+                            uniqueUuid: '1-2-3-1',
+                            originalType: 1,
+                            children: [],
+                        },
+                        {
+                            uniqueUuid: '1-2-3-2',
+                            originalType: 1,
+                            children: [],
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            uniqueUuid: '1-3',
+            originalType: 1,
+            children: [
+                {
+                    uniqueUuid: '1-3-1',
+                    originalType: 1,
+                    children: [],
+                },
+                {
+                    uniqueUuid: '1-3-2',
+                    originalType: 1,
+                    children: [],
+                },
+                {
+                    uniqueUuid: '1-3-3',
+                    originalType: 1,
+                    children: [],
+                },
+            ],
+        },
+    ],
+};
