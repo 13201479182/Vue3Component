@@ -27,6 +27,48 @@ class TreeNode {
     constructor(treeData: TreeData) {
         this.data = treeData;
     }
+
+    // 是否为叶子节点
+    get isLeaf() {
+        if (this.children.length) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    // 获取节点的层级结构
+    get levelMapStructure(): Map<number, TreeNode> {
+        const levelMap = new Map();
+        this._depthFirstSearch(this, (treeNode, depth) => {
+            const level = depth + 1;
+            const levelElements = levelMap.get(level);
+            if (levelElements) {
+                levelElements.push(treeNode);
+            } else {
+                levelMap.set(level, [treeNode]);
+            }
+        });
+        return levelMap;
+    }
+
+    // 深度遍历
+    _depthFirstSearch(
+        treeNode: TreeNode,
+        callback: (treeNode: TreeNode, depth: number) => void,
+        depth = this.depth,
+    ) {
+        if (treeNode) {
+            // 1. 更新parent为上一次创建的实例
+            callback(treeNode, depth);
+            // 2. 递归处理子节点
+            if (treeNode.children && treeNode.children.length) {
+                treeNode.children.forEach(data => {
+                    this._depthFirstSearch(data, callback, depth + 1);
+                });
+            }
+        }
+    }
 }
 
 class Tree {
@@ -40,8 +82,6 @@ class Tree {
     public treeNode: InstanceType<typeof TreeNode> | null = null;
     // 基于uniqueUuid的map节点存储
     public treeNodeMap = new Map<string, TreeNode>();
-    // 基于树层级存储树的节点
-    public treeNodeLevelMap = new Map<number, TreeNode[]>();
 
     constructor(treeData: TreeData) {
         this._createTree(treeData);
@@ -67,19 +107,33 @@ class Tree {
         treeData: TreeData,
         callback: (
             treeData: TreeData,
-            parent: TreeNodeInstance | null,
             depth: number,
-        ) => TreeNodeInstance,
-        parent: TreeNodeInstance | null = null,
+            parent: TreeNodeInstance | null,
+            levelTreeMaps: Map<number, TreeNode[]>,
+        ) => TreeNodeInstance | void,
         depth = 0,
+        parent: TreeNodeInstance | null = null,
+        levelTreeMaps = new Map<number, TreeNode[]>(),
     ) {
         if (treeData) {
             // 1. 更新parent为上一次创建的实例
-            parent = callback(treeData, parent, depth);
+            const nodeInstance = callback(
+                treeData,
+                depth,
+                parent,
+                levelTreeMaps,
+            );
+            parent = nodeInstance ? nodeInstance : null;
             // 2. 递归处理子节点
             if (treeData.children && treeData.children.length) {
                 treeData.children.forEach(data => {
-                    this._depthFirstSearch(data, callback, parent, depth + 1);
+                    this._depthFirstSearch(
+                        data,
+                        callback,
+                        depth + 1,
+                        parent,
+                        levelTreeMaps,
+                    );
                 });
             }
         }
@@ -90,8 +144,9 @@ class Tree {
     // 生成树节点
     _createTreeNode(
         treeData: TreeData,
-        parent: TreeNodeInstance | null,
         depth: number,
+        parent: TreeNodeInstance | null,
+        levelTreeMaps: Map<number, TreeNode[]>,
     ) {
         const treeNode = new TreeNode(treeData);
         // 1. 更新节点的深度
@@ -106,13 +161,12 @@ class Tree {
         this.height = Math.max(this.height, depth + 1);
         // 5. 更新树的宽度
         const level = depth + 1;
-        const levelMap = this.treeNodeLevelMap;
-        const depthElements = levelMap.get(level);
-        if (Array.isArray(depthElements)) {
-            depthElements.push(treeNode);
-            this.width = Math.max(this.width, depthElements.length);
+        const levelElements = levelTreeMaps.get(level);
+        if (levelElements) {
+            levelElements.push(treeNode);
+            this.width = Math.max(this.width, levelElements.length);
         } else {
-            levelMap.set(level, [treeNode]);
+            levelTreeMaps.set(level, [treeNode]);
             this.width = Math.max(this.width, 1);
         }
         // 6. 父节点存在时需要更新的关系
@@ -167,8 +221,8 @@ class Tree {
                 this._depthFirstSearch(
                     data,
                     this._createTreeNode.bind(this),
-                    treeNode,
                     treeNode.depth + 1,
+                    treeNode,
                 );
             });
         } else {
