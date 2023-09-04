@@ -6,7 +6,7 @@
 <template>
     <!-- <div class="tree-graph"> -->
     <!-- 展示当前组件的内容 -->
-    <span class="graph-item" :style="style">{{ data.data.uniqueUuid }}</span>
+    <span class="graph-item" :style="style">{{ data.data?.uniqueUuid }}</span>
 
     <!-- 递归调用当前组件 -->
     <ul v-if="data.children && data.children.length">
@@ -27,8 +27,10 @@ const props = defineProps<{
 const style = computed(() => {
     const node = props.data;
     return {
-        top: `${node.depth * 200}` + 'px',
+        top: node.y + 'px',
         left: node.x + 'px',
+        width: node.width + 'px',
+        height: node.height + 'px',
     };
 });
 </script>

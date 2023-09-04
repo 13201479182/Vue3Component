@@ -5,12 +5,12 @@
  */
 
 import type { TreeData } from '@/util/type';
-import type { NodeOriginalType } from './type';
 
 import Tree from '@/util/Tree';
 
 class TreeGraph {
-    public tree: InstanceType<typeof Tree> | null = null;
+    public tree: InstanceType<typeof Tree>;
+
     constructor(treeData: TreeData) {
         this.tree = new Tree(treeData);
     }

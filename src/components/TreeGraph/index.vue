@@ -5,20 +5,29 @@
 -->
 <template>
     <div class="contanier">
-        <TreeGraphComponent :data="treeData"></TreeGraphComponent>
+        <TreeGraphComponent v-if="data" :data="data"></TreeGraphComponent>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, nextTick } from 'vue';
 
-import { treeExample1 } from '@/mocks/treeData';
+import { treeData, treeTestData } from '@/mocks/treeData';
 import TreeGraph from './TreeGraph';
 
 import TreeGraphComponent from './TreeGraphComponent.vue';
 
-const treeGraph = new TreeGraph(treeExample1);
-const treeData = ref(treeGraph.tree?.treeNode);
+const treeGraph = new TreeGraph(treeData);
+const data = ref(treeGraph.tree.treeNode);
+
+setTimeout(() => {
+    treeGraph.tree?.appendSubTree(treeTestData).then(res => {
+        data.value = null;
+        nextTick(() => {
+            data.value = res;
+        });
+    });
+}, 1000);
 
 console.log('TreeGraph:', treeGraph);
 </script>
@@ -28,6 +37,7 @@ console.log('TreeGraph:', treeGraph);
     position: fixed;
     width: 100%;
     height: 100%;
+    overflow: scroll;
 }
 </style>
 ./treeGraph ./TreeGraph

@@ -14,3 +14,8 @@ export enum NodeOriginalType {
     DO = 7,
     FieldPoint = 8,
 }
+
+export interface PointConfig extends Record<any, number | string> {
+    width: number;
+    height: number;
+}
