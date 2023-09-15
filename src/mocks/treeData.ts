@@ -4,7 +4,7 @@
  * treeData.ts
  */
 
-import type { TreeData } from '../util/type';
+import type { TreeData } from '../components/TreeGraph/utils/type';
 
 export const treeData: TreeData = {
     uniqueUuid: '1',

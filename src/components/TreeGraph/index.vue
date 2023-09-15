@@ -10,24 +10,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick } from 'vue';
+import { ref, nextTick, reactive } from 'vue';
 
 import { treeData, treeTestData } from '@/mocks/treeData';
-import TreeGraph from './TreeGraph';
+import TreeGraph from './utils/TreeGraph';
 
 import TreeGraphComponent from './TreeGraphComponent.vue';
 
 const treeGraph = new TreeGraph(treeData);
 const data = ref(treeGraph.tree.treeNode);
 
-setTimeout(() => {
-    treeGraph.tree?.appendSubTree(treeTestData).then(res => {
-        data.value = null;
-        nextTick(() => {
-            data.value = res;
-        });
-    });
-}, 1000);
+// setTimeout(() => {
+//     treeGraph.tree?.appendSubTree(treeTestData).then(res => {
+//         data.value = null;
+//         nextTick(() => {
+//             data.value = res;
+//         });
+//     });
+// }, 1000);
 
 console.log('TreeGraph:', treeGraph);
 </script>
@@ -40,4 +40,4 @@ console.log('TreeGraph:', treeGraph);
     overflow: scroll;
 }
 </style>
-./treeGraph ./TreeGraph
+./treeGraph ./TreeGraph ./utils/TreeGraph

@@ -4,12 +4,13 @@
  * TreeGraph.ts
  */
 
-import type { TreeData } from '@/util/type';
+import type { TreeData } from '../type';
+import type { TreeInstance } from './tree';
 
-import Tree from '@/util/Tree';
+import Tree from '@/components/TreeGraph/utils/tree';
 
 class TreeGraph {
-    public tree: InstanceType<typeof Tree>;
+    public tree: TreeInstance;
 
     constructor(treeData: TreeData) {
         this.tree = new Tree(treeData);

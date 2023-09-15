@@ -4,17 +4,19 @@
  * TreeGraph.vue
 -->
 <template>
-    <!-- <div class="tree-graph"> -->
-    <!-- 展示当前组件的内容 -->
-    <span class="graph-item" :style="style">{{ data.data?.uniqueUuid }}</span>
+    <div class="tree-graph">
+        <!-- 展示当前组件的内容 -->
+        <span class="graph-item" :style="style">{{
+            data.data?.uniqueUuid
+        }}</span>
 
-    <!-- 递归调用当前组件 -->
-    <ul v-if="data.children && data.children.length">
-        <li v-for="item in data.children">
-            <TreeGraphComponent :data="item"></TreeGraphComponent>
-        </li>
-    </ul>
-    <!-- </div> -->
+        <!-- 递归调用当前组件 -->
+        <ul v-if="data.children && data.children.length">
+            <li v-for="item in data.children">
+                <TreeGraphComponent :data="item"></TreeGraphComponent>
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script setup lang="ts">
