@@ -4,14 +4,21 @@
  * App.vue
 -->
 <template>
-    <TreeGraph></TreeGraph>
+    <G6Tree></G6Tree>
 </template>
 
 <script setup lang="ts">
-import { TreeGraph } from '@/components/index';
+import { G6Tree } from '@/components/index';
 </script>
 
 <style>
+html,
+body,
+#app {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
 body {
     padding: 0;
     margin: 0;
