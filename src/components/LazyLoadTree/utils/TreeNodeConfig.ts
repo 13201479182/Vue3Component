@@ -9,12 +9,12 @@ const config = new Map<NodeOriginalType, PointConfig>();
 // EQ的相关配置
 config.set(NodeOriginalType.EQ, {
     width: 100,
-    height: 100,
+    height: 70,
 });
 // 除了EQ外的相关配置
 config.set(NodeOriginalType.Other, {
     width: 120,
-    height: 120,
+    height: 100,
 });
 
 export default config;

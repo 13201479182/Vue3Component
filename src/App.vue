@@ -4,11 +4,11 @@
  * App.vue
 -->
 <template>
-    <G6Tree></G6Tree>
+    <LazyLoadTree></LazyLoadTree>
 </template>
 
 <script setup lang="ts">
-import { G6Tree } from '@/components/index';
+import { LazyLoadTree } from '@/components/index';
 </script>
 
 <style>

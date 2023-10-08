@@ -1,4 +1,3 @@
-import TreeGraph from './TreeGraph/index.vue';
-import G6Tree from './G6Tree/index.vue';
+import LazyLoadTree from './LazyLoadTree/index.vue';
 
-export { TreeGraph, G6Tree };
+export { LazyLoadTree };

@@ -20,3 +20,14 @@ export interface TreeData extends Record<string, any> {
     originalType: number;
     children?: TreeData[];
 }
+
+// 用于渲染的数据的数据类型
+export interface RenderTreeData {
+    uniqueUuid: string;
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+    data: null | TreeData;
+    children: RenderTreeData[];
+}

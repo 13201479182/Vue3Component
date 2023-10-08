@@ -4,9 +4,10 @@
  * treeData.ts
  */
 
-import type { TreeData } from '../components/TreeGraph/utils/type';
+import type { TreeData } from '../components/LazyLoadTree/type';
 
 export const treeData: TreeData = {
+    type: 'circle',
     uniqueUuid: '1',
     originalType: 1,
     children: [
@@ -33,7 +34,7 @@ export const treeData: TreeData = {
         },
         {
             uniqueUuid: '1-2',
-            originalType: 1,
+            originalType: 99,
             children: [
                 {
                     uniqueUuid: '1-2-1',

@@ -7,7 +7,7 @@
 import type { TreeData, PointConfig } from '@/components/TreeGraph/type';
 
 import generateCoordinate from './draw';
-import TreeNodeConfig from '@/components/TreeGraph/utils/TreeNodeConfig';
+import TreeNodeConfig from './TreeNodeConfig';
 
 class TreeNode implements PointConfig {
     [k: string]: any;
@@ -56,17 +56,13 @@ class TreeNode implements PointConfig {
     get right(): TreeNode | null {
         return (
             this.thread ||
-            (this.children.length > 0
-                ? this.children[this.children.length - 1]
-                : null)
+            (this.children.length > 0 ? this.children[this.children.length - 1] : null)
         );
     }
 
     // 获取节点的左轮廓
     get left(): TreeNode | null {
-        return (
-            this.thread || (this.children.length > 0 ? this.children[0] : null)
-        );
+        return this.thread || (this.children.length > 0 ? this.children[0] : null);
     }
 
     // 广度遍历
@@ -89,26 +85,16 @@ class TreeNode implements PointConfig {
     // 生成树节点的坐标xy
     _generateTreeNodeCoordinate() {
         const treeNode = this;
-        const wArr = [];
-        const hArr = [];
+        const wArr: number[] = [80];
+        const hArr: number[] = [80];
         // 计算配置的最大宽度和最大高度
         for (let config of TreeNodeConfig.values()) {
-            if (typeof config.width === 'number') {
-                wArr.push(config.width);
-            }
-            if (typeof config.height === 'number') {
-                hArr.push(config.height);
-            }
+            wArr.push(config.width);
+            hArr.push(config.height);
         }
-        const maxWidth = Math.max(...wArr);
-        const maxHeight = Math.max(...hArr);
         // 开始生成
         if (treeNode) {
-            let dt = firstWalk(treeNode, maxWidth + 50);
-            let min = secondWalk(dt, maxHeight + 50);
-            if (min < 0) {
-                thirdWalk(dt, -min);
-            }
+            generateCoordinate(treeNode, Math.max.apply(null, wArr), Math.max.apply(null, hArr));
         }
     }
 }
@@ -116,14 +102,13 @@ class TreeNode implements PointConfig {
 class Tree {
     // 树的根节点
     public treeNode: TreeNodeInstance | null = null;
+    public levelMap = new Map<number, TreeNode[]>();
 
     constructor(treeData: TreeData) {
         if (treeData) {
             this._initTree(treeData);
         } else {
-            console.error(
-                `argument err: Tree constructor need requried argument treeData!`,
-            );
+            console.error(`argument err: Tree constructor need requried argument treeData!`);
         }
     }
 
@@ -148,17 +133,6 @@ class Tree {
             heights.push(treeNode.depth + 1);
         });
         return Math.max.apply(null, heights);
-    }
-
-    // 获取树的度
-    get degree(): number {
-        const degrees: number[] = [];
-        this.breadthFirstSearch(treeNode => {
-            if (treeNode.children && treeNode.children.length) {
-                degrees.push(treeNode.children.length);
-            }
-        });
-        return Math.max.apply(null, degrees);
     }
 
     // 获取基于uniqueUuid的map存储结构,便于crud
@@ -202,13 +176,7 @@ class Tree {
             // 2. 递归处理子节点
             if (treeData.children && treeData.children.length) {
                 treeData.children.forEach((data, index) => {
-                    this.depthFirstSearch(
-                        data,
-                        callback,
-                        depth + 1,
-                        parent,
-                        index,
-                    );
+                    this.depthFirstSearch(data, callback, depth + 1, parent, index);
                 });
             }
         }
@@ -263,7 +231,13 @@ class Tree {
         }
         // 5. 配置当前节点
         this._configTreeNode(treeNode);
-
+        // 6. 生成level结构
+        const levelMap = this.levelMap.get(depth);
+        if (levelMap) {
+            levelMap.push(treeNode);
+        } else {
+            this.levelMap.set(depth, [treeNode]);
+        }
         return treeNode;
     }
 

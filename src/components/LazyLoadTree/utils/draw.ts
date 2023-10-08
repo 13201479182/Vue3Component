@@ -18,9 +18,7 @@ function firstWalk(treeNode: TreeNodeInstance, distance: number) {
         executeShifts(treeNode);
         // 子节点的中点
         let midpoint =
-            (treeNode.children[0].x +
-                treeNode.children[treeNode.children.length - 1].x) /
-            2;
+            (treeNode.children[0].x + treeNode.children[treeNode.children.length - 1].x) / 2;
         let leftBrother = treeNode.leftBrother;
         if (leftBrother) {
             // 如果是非叶子节点则其x坐标等于其左兄弟的x坐标加上间距distance
@@ -89,11 +87,7 @@ function apportion(
             vOuterRight = vOuterRight?.right!;
             vOuterRight.ancestor = treeNode;
 
-            let shift =
-                vInnerLeft.x +
-                sInnerLeft -
-                (vInnerRight.x + sInnerRight) +
-                distance;
+            let shift = vInnerLeft.x + sInnerLeft - (vInnerRight.x + sInnerRight) + distance;
             if (shift > 0) {
                 let _ancestor = ancestor(vInnerLeft, treeNode, defaultAncestor);
                 moveSubtree(_ancestor, treeNode, shift);
@@ -122,11 +116,7 @@ function apportion(
     return defaultAncestor;
 }
 
-function moveSubtree(
-    wl: TreeNodeInstance,
-    wr: TreeNodeInstance,
-    shift: number,
-) {
+function moveSubtree(wl: TreeNodeInstance, wr: TreeNodeInstance, shift: number) {
     // 两棵冲突的树的间隔被之间的树分成多少分
     let subtrees = wr.index - wl.index;
     wr.change -= shift / subtrees;
@@ -156,10 +146,7 @@ function ancestor(
     treeNode: TreeNodeInstance,
     default_ancestor: TreeNodeInstance,
 ) {
-    if (
-        vInnerLeft.ancestor &&
-        treeNode.parent?.children.includes(vInnerLeft.ancestor)
-    ) {
+    if (vInnerLeft.ancestor && treeNode.parent?.children.includes(vInnerLeft.ancestor)) {
         return vInnerLeft.ancestor;
     } else {
         return default_ancestor;
