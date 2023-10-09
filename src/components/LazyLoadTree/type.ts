@@ -6,7 +6,7 @@
 
 export enum NodeOriginalType {
     EQ = 1,
-    Other = -1,
+    Point = 999,
 }
 
 export interface PointConfig extends Record<any, number | string> {

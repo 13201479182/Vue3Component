@@ -5,7 +5,7 @@
 -->
 <template>
     <div ref="lazyTreeRef" class="lazy-tree">
-        <TreeNode :data="treeNode"></TreeNode>
+        <TreeNode :parent="null" :data="treeNode"></TreeNode>
     </div>
 </template>
 
@@ -15,6 +15,7 @@ import type { TreeData, RenderTreeData } from './type';
 
 import { watch, shallowRef, ref, onMounted } from 'vue';
 import Tree from './utils/tree';
+import { NodeOriginalType } from './type';
 
 import TreeNode from './TreeNode.vue';
 
@@ -28,38 +29,39 @@ const props = defineProps<Props>();
 let loadedLevel = -1;
 const treeNode = ref<RenderTreeData[]>([]);
 // 在当前树中查找具体节点
-function findTargetNode(nodeTree: RenderTreeData[], parentId: string): RenderTreeData | void {
-    for (let i = 0, l = nodeTree.length; i < l; i++) {
-        const node = nodeTree[i];
-        if (node.data?.id === parentId) {
-            return node;
-        } else {
-            const result = findTargetNode(node.children, parentId);
-            if (result) {
-                return result;
-            }
+function findTargetNode(nodeTree: RenderTreeData, parentUuid: string): RenderTreeData | void {
+    const queue = [nodeTree];
+    while (queue.length > 0) {
+        const shiftNode = queue.shift() as RenderTreeData;
+        if (shiftNode.uniqueUuid === parentUuid) return shiftNode;
+        if (shiftNode.children && shiftNode.children.length) {
+            shiftNode.children.forEach(item => {
+                queue.push(item);
+            });
         }
     }
 }
 // 懒加载下一级树
 function loadNextLevelTree() {
     const nextLevelNodeArr = treeData.value?.levelMap.get(++loadedLevel);
+
     if (nextLevelNodeArr) {
         if (loadedLevel === 0) {
             // 加载根节点
+            const rootNode = nextLevelNodeArr[0];
             treeNode.value.push({
-                uniqueUuid: nextLevelNodeArr[0].data!.uniqueUuid,
-                width: nextLevelNodeArr[0].width,
-                height: nextLevelNodeArr[0].height,
-                x: nextLevelNodeArr[0].x,
-                y: nextLevelNodeArr[0].y,
-                data: nextLevelNodeArr[0].data,
+                uniqueUuid: rootNode.data!.uniqueUuid,
+                width: rootNode.width,
+                height: rootNode.height,
+                x: rootNode.x,
+                y: rootNode.y,
+                data: rootNode.data,
                 children: [],
             });
         } else {
             // 加载叶子节点
             nextLevelNodeArr.forEach(item => {
-                const target = findTargetNode(treeNode.value, item.data!.parentId);
+                const target = findTargetNode(treeNode.value[0], item.data!.parentUuid);
                 target &&
                     target.children.push({
                         uniqueUuid: item.data!.uniqueUuid,
@@ -88,47 +90,49 @@ watch(treeData, newVal => {
     if (newVal) {
         loadedLevel = -1;
         treeNode.value = [];
-        loadLevelTree(6);
+        loadLevelTree(10);
+        console.log('treeNode:', treeNode);
     }
 });
 
-// 将modelList虚拟化
-const virtualNode = {
-    originalType: 999,
-};
 // 标准化当前数据
-function normalizeTreeData(data: TreeData) {
-    if (data && Array.isArray(data.children) && data.children.length) {
-        data.children.forEach(item => {
-            normalizeTreeData(item);
+function normalizeTreeData(node: TreeData, parent: TreeData | null) {
+    if (node && Array.isArray(node.children) && node.children.length) {
+        node.children.forEach(item => {
+            normalizeTreeData(item, node);
         });
     }
-    if (data.modelList) {
-        if (!data.children) data.children = [];
-        data.children.push(
-            Object.assign({
-                originalType: 999,
-                uniqueUuid: Math.floor(Math.random() * 10 ** 15 + Date.now()) + '',
-                parentId: data.id,
-            }),
-            // @ts-ignore
-            virtualNode,
-            {
-                modelList: data.modelList,
-            },
-        );
+
+    // 为每一个节点绑定其父级uid
+    node.parentUuid = parent ? parent.uniqueUuid : null;
+
+    // 将modelList扁平化为node的children
+    if (node.modelList) {
+        if (!node.children) node.children = [];
+        const point = {
+            originalType: NodeOriginalType.Point,
+            parentUuid: node.uniqueUuid,
+            uniqueUuid: Math.floor(Math.random() * 10 ** 15 + Date.now()) + '',
+            modelList: node.modelList,
+        };
+        // 为modelList中的每一个成员赋予parentUuid
+        node.modelList.forEach(item => {
+            item.parentUuid = point.uniqueUuid;
+        });
+        node.children.push(point);
         // 移除data对modelList的引用
-        delete data.modelList;
+        delete node.modelList;
     }
 }
 // 更新当前数据
 function update() {
     props.queryTreeDataApi().then(data => {
         const sourceData: any = data;
-        normalizeTreeData(sourceData);
+        normalizeTreeData(sourceData, null);
         treeData.value = new Tree(sourceData);
     });
 }
+update();
 
 const lazyTreeRef = ref<HTMLDivElement | null>();
 onMounted(() => {
@@ -145,11 +149,51 @@ defineExpose({
 });
 </script>
 
-<style scoped>
-.contanier {
+<style lang="less">
+.lazy-tree {
     position: fixed;
     width: 100%;
     height: 100%;
     overflow: scroll;
+    .eq-item,
+    .point-item,
+    .top-line,
+    .bottom-line,
+    .level-line {
+        display: inline-block;
+        position: absolute;
+    }
+    .eq-item {
+        text-align: center;
+        background-color: aqua;
+    }
+    .point-item {
+        box-sizing: border-box;
+        padding: 5px;
+        border: 1px dashed #a8abb2;
+    }
+    .top-line,
+    .bottom-line {
+        width: 2px;
+        background-color: purple;
+    }
+    .level-line {
+        height: 2px;
+        background-color: purple;
+    }
+    .lazy-block {
+        width: 100%;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        li {
+            font-size: 14px;
+            height: 25px;
+            line-height: 25px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
 }
 </style>

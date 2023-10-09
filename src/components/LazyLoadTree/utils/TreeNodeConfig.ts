@@ -12,7 +12,7 @@ config.set(NodeOriginalType.EQ, {
     height: 70,
 });
 // 除了EQ外的相关配置
-config.set(NodeOriginalType.Other, {
+config.set(NodeOriginalType.Point, {
     width: 120,
     height: 100,
 });

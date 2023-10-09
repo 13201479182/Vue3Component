@@ -4,7 +4,7 @@
  * Tree.ts
  */
 
-import type { TreeData, PointConfig } from '@/components/TreeGraph/type';
+import type { TreeData, PointConfig } from '../type';
 
 import generateCoordinate from './draw';
 import TreeNodeConfig from './TreeNodeConfig';
