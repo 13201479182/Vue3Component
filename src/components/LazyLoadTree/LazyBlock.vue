@@ -20,7 +20,9 @@ import { onMounted, ref } from 'vue';
 interface Props {
     data: TreeData[];
 }
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+    data: () => [],
+});
 
 const lazyData = ref<TreeData[]>([]);
 

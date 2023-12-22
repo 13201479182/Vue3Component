@@ -4,9 +4,9 @@
  * treeData.ts
  */
 import Mock from 'mockjs';
-import type { TreeData } from '@/components/LazyLoadTree/type';
+import type { RenderData } from '@/components/LazyLoadTree/type';
 
-export const treeData: TreeData = {
+export const treeData: RenderData = {
     uniqueUuid: Mock.Random.uuid(),
     originalType: 1,
     name: Mock.Random.cname(),
@@ -27,404 +27,33 @@ export const treeData: TreeData = {
                             name: Mock.Random.cname(),
                             children: [],
                         },
-                        {
-                            uniqueUuid: Mock.Random.uuid(),
-                            originalType: 1,
-                            name: Mock.Random.cname(),
-                            children: [],
-                        },
-                        {
-                            uniqueUuid: Mock.Random.uuid(),
-                            originalType: 1,
-                            name: Mock.Random.cname(),
-                            children: [],
-                            modelList: Mock.mock({
-                                'list|1000-3000': [
-                                    {
-                                        'uniqueUuid': '@uuid',
-                                        'name': '@cname',
-                                        'originalType|2-9': 2,
-                                    },
-                                ],
-                            }).list,
-                        },
                     ],
-                },
-                {
-                    uniqueUuid: Mock.Random.uuid(),
-                    originalType: 1,
-                    name: Mock.Random.cname(),
-                    children: [
-                        {
-                            uniqueUuid: Mock.Random.uuid(),
-                            originalType: 1,
-                            name: Mock.Random.cname(),
-                            children: [
-                                {
-                                    uniqueUuid: Mock.Random.uuid(),
-                                    originalType: 1,
-                                    name: Mock.Random.cname(),
-                                    children: [],
-                                },
-                                {
-                                    uniqueUuid: Mock.Random.uuid(),
-                                    originalType: 1,
-                                    name: Mock.Random.cname(),
-                                    children: [],
-                                },
-                                {
-                                    uniqueUuid: Mock.Random.uuid(),
-                                    originalType: 1,
-                                    name: Mock.Random.cname(),
-                                    children: [],
-                                    modelList: Mock.mock({
-                                        'list|1000-3000': [
-                                            {
-                                                'uniqueUuid': '@uuid',
-                                                'name': '@cname',
-                                                'originalType|2-9': 2,
-                                            },
-                                        ],
-                                    }).list,
-                                },
-                            ],
-                        },
-                        {
-                            uniqueUuid: Mock.Random.uuid(),
-                            originalType: 1,
-                            name: Mock.Random.cname(),
-                            children: [
-                                {
-                                    uniqueUuid: Mock.Random.uuid(),
-                                    originalType: 1,
-                                    name: Mock.Random.cname(),
-                                    children: [
-                                        {
-                                            uniqueUuid: Mock.Random.uuid(),
-                                            originalType: 1,
-                                            name: Mock.Random.cname(),
-                                            children: [
-                                                {
-                                                    uniqueUuid: Mock.Random.uuid(),
-                                                    originalType: 1,
-                                                    name: Mock.Random.cname(),
-                                                    children: [
-                                                        {
-                                                            uniqueUuid: Mock.Random.uuid(),
-                                                            originalType: 1,
-                                                            name: Mock.Random.cname(),
-                                                            children: [
-                                                                {
-                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                    originalType: 1,
-                                                                    name: Mock.Random.cname(),
-                                                                    children: [
-                                                                        {
-                                                                            uniqueUuid: Mock.Random.uuid(),
-                                                                            originalType: 1,
-                                                                            name: Mock.Random.cname(),
-                                                                            children: [
-                                                                                {
-                                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                                    originalType: 1,
-                                                                                    name: Mock.Random.cname(),
-                                                                                    children: [
-                                                                                        {
-                                                                                            uniqueUuid: Mock.Random.uuid(),
-                                                                                            originalType: 1,
-                                                                                            name: Mock.Random.cname(),
-                                                                                            children: [
-                                                                                                {
-                                                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                                                    originalType: 1,
-                                                                                                    name: Mock.Random.cname(),
-                                                                                                    children: [],
-                                                                                                },
-                                                                                            ],
-                                                                                        },
-                                                                                    ],
-                                                                                    modelList: Mock.mock({
-                                                                                        'list|1000-3000': [
-                                                                                            {
-                                                                                                'uniqueUuid': '@uuid',
-                                                                                                'name': '@cname',
-                                                                                                'originalType|2-9': 2,
-                                                                                            },
-                                                                                        ],
-                                                                                    }).list,
-                                                                                },
-                                                                            ],
-                                                                        },
-                                                                        {
-                                                                            uniqueUuid: Mock.Random.uuid(),
-                                                                            originalType: 1,
-                                                                            name: Mock.Random.cname(),
-                                                                            children: [],
-                                                                        },
-                                                                    ],
-                                                                },
-                                                                {
-                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                    originalType: 1,
-                                                                    name: Mock.Random.cname(),
-                                                                    children: [
-                                                                        {
-                                                                            uniqueUuid: Mock.Random.uuid(),
-                                                                            originalType: 1,
-                                                                            name: Mock.Random.cname(),
-                                                                            children: [],
-                                                                        },
-                                                                        {
-                                                                            uniqueUuid: Mock.Random.uuid(),
-                                                                            originalType: 1,
-                                                                            name: Mock.Random.cname(),
-                                                                            children: [],
-                                                                        },
-                                                                        {
-                                                                            uniqueUuid: Mock.Random.uuid(),
-                                                                            originalType: 1,
-                                                                            name: Mock.Random.cname(),
-                                                                            children: [],
-                                                                        },
-                                                                    ],
-                                                                },
-                                                            ],
-                                                        },
-                                                        {
-                                                            uniqueUuid: Mock.Random.uuid(),
-                                                            originalType: 1,
-                                                            name: Mock.Random.cname(),
-                                                            children: [
-                                                                {
-                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                    originalType: 1,
-                                                                    name: Mock.Random.cname(),
-                                                                    children: [],
-                                                                },
-                                                                {
-                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                    originalType: 1,
-                                                                    name: Mock.Random.cname(),
-                                                                    children: [],
-                                                                },
-                                                                {
-                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                    originalType: 1,
-                                                                    name: Mock.Random.cname(),
-                                                                    children: [],
-                                                                },
-                                                            ],
-                                                        },
-                                                    ],
-                                                    modelList: Mock.mock({
-                                                        'list|1000-3000': [
-                                                            {
-                                                                'uniqueUuid': '@uuid',
-                                                                'name': '@cname',
-                                                                'originalType|2-9': 2,
-                                                            },
-                                                        ],
-                                                    }).list,
-                                                },
-                                                {
-                                                    uniqueUuid: Mock.Random.uuid(),
-                                                    originalType: 1,
-                                                    name: Mock.Random.cname(),
-                                                    children: [
-                                                        {
-                                                            uniqueUuid: Mock.Random.uuid(),
-                                                            originalType: 1,
-                                                            name: Mock.Random.cname(),
-                                                            children: [
-                                                                {
-                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                    originalType: 1,
-                                                                    name: Mock.Random.cname(),
-                                                                    children: [
-                                                                        {
-                                                                            uniqueUuid: Mock.Random.uuid(),
-                                                                            originalType: 1,
-                                                                            name: Mock.Random.cname(),
-                                                                            children: [],
-                                                                        },
-                                                                        {
-                                                                            uniqueUuid: Mock.Random.uuid(),
-                                                                            originalType: 1,
-                                                                            name: Mock.Random.cname(),
-                                                                            children: [
-                                                                                {
-                                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                                    originalType: 1,
-                                                                                    name: Mock.Random.cname(),
-                                                                                    children: [
-                                                                                        {
-                                                                                            uniqueUuid: Mock.Random.uuid(),
-                                                                                            originalType: 1,
-                                                                                            name: Mock.Random.cname(),
-                                                                                            children: [
-                                                                                                {
-                                                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                                                    originalType: 1,
-                                                                                                    name: Mock.Random.cname(),
-                                                                                                    children: [
-                                                                                                        {
-                                                                                                            uniqueUuid: Mock.Random.uuid(),
-                                                                                                            originalType: 1,
-                                                                                                            name: Mock.Random.cname(),
-                                                                                                            children: [
-                                                                                                                {
-                                                                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                                                                    originalType: 1,
-                                                                                                                    name: Mock.Random.cname(),
-                                                                                                                    children: [],
-                                                                                                                },
-                                                                                                            ],
-                                                                                                        },
-                                                                                                    ],
-                                                                                                },
-                                                                                            ],
-                                                                                        },
-                                                                                    ],
-                                                                                },
-                                                                                {
-                                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                                    originalType: 1,
-                                                                                    name: Mock.Random.cname(),
-                                                                                    children: [],
-                                                                                },
-                                                                            ],
-                                                                        },
-                                                                        {
-                                                                            uniqueUuid: Mock.Random.uuid(),
-                                                                            originalType: 1,
-                                                                            name: Mock.Random.cname(),
-                                                                            children: [],
-                                                                        },
-                                                                    ],
-                                                                },
-                                                                {
-                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                    originalType: 1,
-                                                                    name: Mock.Random.cname(),
-                                                                    children: [],
-                                                                },
-                                                            ],
-                                                        },
-                                                        {
-                                                            uniqueUuid: Mock.Random.uuid(),
-                                                            originalType: 1,
-                                                            name: Mock.Random.cname(),
-                                                            children: [
-                                                                {
-                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                    originalType: 1,
-                                                                    name: Mock.Random.cname(),
-                                                                    children: [],
-                                                                },
-                                                                {
-                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                    originalType: 1,
-                                                                    name: Mock.Random.cname(),
-                                                                    children: [],
-                                                                },
-                                                            ],
-                                                        },
-                                                    ],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            uniqueUuid: Mock.Random.uuid(),
-                                            originalType: 1,
-                                            name: Mock.Random.cname(),
-                                            children: [],
-                                        },
-                                    ],
-                                },
-                                {
-                                    uniqueUuid: Mock.Random.uuid(),
-                                    originalType: 1,
-                                    name: Mock.Random.cname(),
-                                    children: [],
-                                },
-                            ],
-                        },
-                    ],
-                },
-                {
-                    uniqueUuid: Mock.Random.uuid(),
-                    originalType: 1,
-                    name: Mock.Random.cname(),
-                    children: [
-                        {
-                            uniqueUuid: Mock.Random.uuid(),
-                            originalType: 1,
-                            name: Mock.Random.cname(),
-                            children: [],
-                            modelList: Mock.mock({
-                                'list|100-1000': [
-                                    {
-                                        'uniqueUuid': '@uuid',
-                                        'name': '@cname',
-                                        'originalType|2-9': 2,
-                                    },
-                                ],
-                            }).list,
-                        },
-                        {
-                            uniqueUuid: Mock.Random.uuid(),
-                            originalType: 1,
-                            name: Mock.Random.cname(),
-                            children: [],
-                        },
-                        {
-                            uniqueUuid: Mock.Random.uuid(),
-                            originalType: 1,
-                            name: Mock.Random.cname(),
-                            children: [],
-                            modelList: Mock.mock({
-                                'list|100-1000': [
-                                    {
-                                        'uniqueUuid': '@uuid',
-                                        'name': '@cname',
-                                        'originalType|2-9': 2,
-                                    },
-                                ],
-                            }).list,
-                        },
-                    ],
-                },
-                {
-                    uniqueUuid: Mock.Random.uuid(),
-                    originalType: 1,
-                    name: Mock.Random.cname(),
-                    children: [
-                        {
-                            uniqueUuid: Mock.Random.uuid(),
-                            originalType: 1,
-                            name: Mock.Random.cname(),
-                            children: [],
-                        },
-                    ],
+                    modelList: Mock.mock({
+                        'list|500-3000': [
+                            {
+                                'uniqueUuid': '@uuid',
+                                'name': '@cname',
+                                'originalType|2-9': 2,
+                            },
+                        ],
+                    }).list,
                 },
             ],
-            modelList: Mock.mock({
-                'list|100-1000': [
-                    {
-                        'uniqueUuid': '@uuid',
-                        'name': '@cname',
-                        'originalType|2-9': 2,
-                    },
-                ],
-            }).list,
         },
         {
             uniqueUuid: Mock.Random.uuid(),
             originalType: 1,
             name: Mock.Random.cname(),
-            children: [],
+            children: [
+                {
+                    uniqueUuid: Mock.Random.uuid(),
+                    originalType: 1,
+                    name: Mock.Random.cname(),
+                    children: [],
+                },
+            ],
             modelList: Mock.mock({
-                'list|1000-3000': [
+                'list|500-3000': [
                     {
                         'uniqueUuid': '@uuid',
                         'name': '@cname',
@@ -442,127 +71,40 @@ export const treeData: TreeData = {
                     uniqueUuid: Mock.Random.uuid(),
                     originalType: 1,
                     name: Mock.Random.cname(),
-                    children: [],
-                },
-                {
-                    uniqueUuid: Mock.Random.uuid(),
-                    originalType: 1,
-                    name: Mock.Random.cname(),
                     children: [
                         {
                             uniqueUuid: Mock.Random.uuid(),
                             originalType: 1,
                             name: Mock.Random.cname(),
-                            children: [
-                                {
-                                    uniqueUuid: Mock.Random.uuid(),
-                                    originalType: 1,
-                                    name: Mock.Random.cname(),
-                                    children: [
-                                        {
-                                            uniqueUuid: Mock.Random.uuid(),
-                                            originalType: 1,
-                                            name: Mock.Random.cname(),
-                                            children: [
-                                                {
-                                                    uniqueUuid: Mock.Random.uuid(),
-                                                    originalType: 1,
-                                                    name: Mock.Random.cname(),
-                                                    children: [
-                                                        {
-                                                            uniqueUuid: Mock.Random.uuid(),
-                                                            originalType: 1,
-                                                            name: Mock.Random.cname(),
-                                                            children: [
-                                                                {
-                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                    originalType: 1,
-                                                                    name: Mock.Random.cname(),
-                                                                    children: [
-                                                                        {
-                                                                            uniqueUuid: Mock.Random.uuid(),
-                                                                            originalType: 1,
-                                                                            name: Mock.Random.cname(),
-                                                                            children: [
-                                                                                {
-                                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                                    originalType: 1,
-                                                                                    name: Mock.Random.cname(),
-                                                                                    children: [
-                                                                                        {
-                                                                                            uniqueUuid: Mock.Random.uuid(),
-                                                                                            originalType: 1,
-                                                                                            name: Mock.Random.cname(),
-                                                                                            children: [
-                                                                                                {
-                                                                                                    uniqueUuid: Mock.Random.uuid(),
-                                                                                                    originalType: 1,
-                                                                                                    name: Mock.Random.cname(),
-                                                                                                    children: [],
-                                                                                                },
-                                                                                            ],
-                                                                                        },
-                                                                                    ],
-                                                                                },
-                                                                            ],
-                                                                        },
-                                                                    ],
-                                                                    modelList: Mock.mock({
-                                                                        'list|1000-3000': [
-                                                                            {
-                                                                                'uniqueUuid': '@uuid',
-                                                                                'name': '@cname',
-                                                                                'originalType|2-9': 2,
-                                                                            },
-                                                                        ],
-                                                                    }).list,
-                                                                },
-                                                            ],
-                                                        },
-                                                    ],
-                                                },
-                                            ],
-                                            modelList: Mock.mock({
-                                                'list|10-100': [
-                                                    {
-                                                        'uniqueUuid': '@uuid',
-                                                        'name': '@cname',
-                                                        'originalType|2-9': 2,
-                                                    },
-                                                ],
-                                            }).list,
-                                        },
-                                    ],
-                                    modelList: Mock.mock({
-                                        'list|10-100': [
-                                            {
-                                                'uniqueUuid': '@uuid',
-                                                'name': '@cname',
-                                                'originalType|2-9': 2,
-                                            },
-                                        ],
-                                    }).list,
-                                },
-                            ],
+                            children: [],
+                        },
+                        {
+                            uniqueUuid: Mock.Random.uuid(),
+                            originalType: 1,
+                            name: Mock.Random.cname(),
+                            children: [],
+                            modelList: Mock.mock({
+                                'list|500-3000': [
+                                    {
+                                        'uniqueUuid': '@uuid',
+                                        'name': '@cname',
+                                        'originalType|2-9': 2,
+                                    },
+                                ],
+                            }).list,
                         },
                     ],
                 },
-                {
-                    uniqueUuid: Mock.Random.uuid(),
-                    originalType: 1,
-                    name: Mock.Random.cname(),
-                    children: [],
-                },
             ],
+            modelList: Mock.mock({
+                'list|500-3000': [
+                    {
+                        'uniqueUuid': '@uuid',
+                        'name': '@cname',
+                        'originalType|2-9': 2,
+                    },
+                ],
+            }).list,
         },
     ],
-    modelList: Mock.mock({
-        'list|10-100': [
-            {
-                'uniqueUuid': '@uuid',
-                'name': '@cname',
-                'originalType|2-9': 2,
-            },
-        ],
-    }).list,
 };

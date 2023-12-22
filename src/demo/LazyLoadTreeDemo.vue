@@ -5,17 +5,12 @@
 -->
 <template>
     <div class="lazy-load-tree-demo">
-        <LazyLoadTree :query-tree-data-api="queryTreeDataApi"></LazyLoadTree>
+        <LazyLoadTree></LazyLoadTree>
     </div>
 </template>
 
 <script setup lang="ts">
 import { LazyLoadTree } from '@/components';
-import { treeData } from '@/mocks/lazyLoadTreeData';
-
-function queryTreeDataApi() {
-    return Promise.resolve(treeData);
-}
 </script>
 
 <style scoped></style>
